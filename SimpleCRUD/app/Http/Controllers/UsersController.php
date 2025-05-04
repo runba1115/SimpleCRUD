@@ -51,7 +51,7 @@ class UsersController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/home'); // 必要に応じてリダイレクト先を変更
+            return redirect()->intended('posts.index'); // 必要に応じてリダイレクト先を変更
         }
 
         return back()->withErrors([

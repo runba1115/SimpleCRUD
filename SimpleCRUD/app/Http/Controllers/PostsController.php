@@ -39,4 +39,39 @@ class PostsController extends Controller
 
         return redirect()->route('posts.index')->with('success', '投稿が作成されました');
     }
+        // 投稿詳細表示
+    public function show(Post $post)
+    {
+        return view('posts.show', compact('post'));
+    }
+
+    // 投稿の作者とログイン中のユーザーが違ったらリダイレクト先（投稿一覧ページ）を返す
+    private function ensureAuthor(Post $post)
+    {
+        if ($post->user_id !== Auth::id()) {
+            return redirect()->route('posts.index');
+        }
+        return null;
+    }
+
+    // 投稿編集ページ表示
+    public function edit(Post $post)
+    {
+        if ($redirect = $this->ensureAuthor($post)) {
+            return $redirect;
+        }
+
+        return view('posts.edit', compact('post'));
+    }
+
+    // 投稿削除
+    public function delete(Post $post)
+    {
+        if ($redirect = $this->ensureAuthor($post)) {
+            return $redirect;
+        }
+
+        $post->delete();
+        return redirect()->route('posts.index')->with('success', '投稿が削除されました');
+    }
 }

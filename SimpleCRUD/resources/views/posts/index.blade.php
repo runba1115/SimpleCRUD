@@ -10,6 +10,8 @@
 
 <!-- 本文部分 -->
 @section('content')
+    <a href="{{route('posts.create')}}">新規作成</a>
+
     @foreach ($posts as $post)
         <div>
             <!-- ユーザー名 -->
@@ -29,14 +31,14 @@
 
             <!-- 編集ボタン -->
             <a href="{{ route('posts.edit', $post->id) }}" class="edit-button"
-                @if ($post->user_id !== Auth::id()) style="pointer-events: none; color: grey;" @endif>編集</a>
+                @if ($post->user_id !== Auth::id()) style="pointer-events: none; color: grey;" tabindex="-1" @endif>編集</a>
 
             <!-- 削除ボタン -->
-            <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
+            <form action="{{ route('posts.delete', $post->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="delete-button"
-                    @if ($post->user_id !== Auth::id()) style="pointer-events: none; background-color: grey;" @endif>
+                    @if ($post->user_id !== Auth::id()) style="pointer-events: none; background-color: grey;" tabindex="-1" @endif>
                     削除
                 </button>
             </form>
