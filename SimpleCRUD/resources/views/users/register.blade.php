@@ -1,4 +1,4 @@
-@extends('partial/app')
+@extends('partial/common/app')
 
 <!-- 下記にブラウザのタブに表示するタイトルを設定する -->
 @section('title', 'ユーザー登録')

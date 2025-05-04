@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
@@ -34,7 +35,38 @@ class UsersController extends Controller
         ]);
 
         // 登録後、ログイン画面へリダイレクト
-        return redirect()->route('login')->with('success', 'ユーザー登録が完了しました。ログインしてください。');
+        return redirect()->route('users.login')->with('success', 'ユーザー登録が完了しました。ログインしてください。');
+    }
+    
+    // ログインフォームを表示
+    public function showLoginForm()
+    {
+        return view('users.login');
+    }
+
+    // ログイン処理
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/home'); // 必要に応じてリダイレクト先を変更
+        }
+
+        return back()->withErrors([
+            'email' => '認証に失敗しました。',
+        ])->withInput($request->only('email', 'remember'));
+    }
+
+    // ログアウト
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('users.login');
     }
 
 }
