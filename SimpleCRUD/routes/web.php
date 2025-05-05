@@ -22,4 +22,5 @@ Route::post('posts/store', [PostsController::class, 'store'])->name('posts.store
 Route::get('posts/index', [PostsController::class, 'index'])->name('posts.index'); // 投稿一覧ページ
 Route::get('post/show/{post}', [PostsController::class, 'show'])->name('posts.show'); // 投稿詳細
 Route::get('post/edit/{post}', [PostsController::class, 'edit'])->name('posts.edit'); // 投稿編集
+Route::put('post/update/{post}', [PostsController::class, 'update'])->name('posts.update'); // 投稿更新
 Route::delete('post/delete/{post}', [PostsController::class, 'delete'])->name('posts.delete'); // 投稿削除

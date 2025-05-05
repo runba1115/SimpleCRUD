@@ -39,7 +39,8 @@ class PostsController extends Controller
 
         return redirect()->route('posts.index')->with('success', '投稿が作成されました');
     }
-        // 投稿詳細表示
+
+    // 投稿詳細表示
     public function show(Post $post)
     {
         return view('posts.show', compact('post'));
@@ -62,6 +63,28 @@ class PostsController extends Controller
         }
 
         return view('posts.edit', compact('post'));
+    }
+
+    // 更新
+    public function update(Request $request, Post $post)
+    {
+        if ($redirect = $this->ensureAuthor($post)) {
+            return $redirect;
+        }
+    
+        // バリデーション
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'detail' => 'required|string',
+        ]);
+    
+        // 更新処理
+        $post->update([
+            'title' => $request->input('title'),
+            'detail' => $request->input('detail'),
+        ]);
+    
+        return redirect()->route('posts.index', $post->id)->with('success', '投稿が更新されました');
     }
 
     // 投稿削除
