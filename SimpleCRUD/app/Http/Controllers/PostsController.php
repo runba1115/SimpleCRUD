@@ -41,8 +41,13 @@ class PostsController extends Controller
     }
 
     // 投稿詳細表示
-    public function show(Post $post)
+    public function show($id)
     {
+        $post = Post::find($id);
+        if (!$post) {
+            return redirect()->route('posts.index');
+        }
+    
         return view('posts.show', compact('post'));
     }
 
@@ -56,44 +61,57 @@ class PostsController extends Controller
     }
 
     // 投稿編集ページ表示
-    public function edit(Post $post)
+    public function edit($id)
     {
-        if ($redirect = $this->ensureAuthor($post)) {
-            return $redirect;
+        $post = Post::find($id);
+        if (!$post) {
+            return redirect()->route('posts.index');
         }
-
-        return view('posts.edit', compact('post'));
-    }
-
-    // 更新
-    public function update(Request $request, Post $post)
-    {
+    
         if ($redirect = $this->ensureAuthor($post)) {
             return $redirect;
         }
     
-        // バリデーション
+        return view('posts.edit', compact('post'));
+    }
+
+    // 更新
+    public function update(Request $request, $id)
+    {
+        $post = Post::find($id);
+        if (!$post) {
+            return redirect()->route('posts.index');
+        }
+    
+        if ($redirect = $this->ensureAuthor($post)) {
+            return $redirect;
+        }
+    
         $request->validate([
             'title' => 'required|string|max:255',
             'detail' => 'required|string',
         ]);
     
-        // 更新処理
         $post->update([
             'title' => $request->input('title'),
             'detail' => $request->input('detail'),
         ]);
     
-        return redirect()->route('posts.index', $post->id)->with('success', '投稿が更新されました');
+        return redirect()->route('posts.index')->with('success', '投稿が更新されました');
     }
 
     // 投稿削除
-    public function delete(Post $post)
+    public function delete($id)
     {
+        $post = Post::find($id);
+        if (!$post) {
+            return redirect()->route('posts.index');
+        }
+    
         if ($redirect = $this->ensureAuthor($post)) {
             return $redirect;
         }
-
+    
         $post->delete();
         return redirect()->route('posts.index')->with('success', '投稿が削除されました');
     }

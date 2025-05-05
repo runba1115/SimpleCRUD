@@ -20,7 +20,13 @@ Route::get('/logout', [UsersController::class, 'logout'])->name('users.logout');
 Route::get('posts/create', [PostsController::class, 'create'])->name('posts.create'); // 投稿作成ページ
 Route::post('posts/store', [PostsController::class, 'store'])->name('posts.store'); // 投稿保存
 Route::get('posts/index', [PostsController::class, 'index'])->name('posts.index'); // 投稿一覧ページ
-Route::get('post/show/{post}', [PostsController::class, 'show'])->name('posts.show'); // 投稿詳細
-Route::get('post/edit/{post}', [PostsController::class, 'edit'])->name('posts.edit'); // 投稿編集
-Route::put('post/update/{post}', [PostsController::class, 'update'])->name('posts.update'); // 投稿更新
-Route::delete('post/delete/{post}', [PostsController::class, 'delete'])->name('posts.delete'); // 投稿削除
+Route::get('post/show/{id}', [PostsController::class, 'show'])->name('posts.show'); // 投稿詳細
+Route::get('post/edit/{id}', [PostsController::class, 'edit'])->name('posts.edit'); // 投稿編集
+Route::put('post/update/{id}', [PostsController::class, 'update'])->name('posts.update'); // 投稿更新
+Route::delete('post/delete/{id}', [PostsController::class, 'delete'])->name('posts.delete'); // 投稿削除
+
+
+
+
+
+
