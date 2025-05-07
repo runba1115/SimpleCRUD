@@ -1,0 +1,70 @@
+/* アラートのスタイル */
+.posts_simple_view_alert {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.posts_simple_view_alert_success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* 新規作成ボタン */
+.posts_simple_view_create_button {
+    background-color: #28a745;
+    margin-bottom: 15px;
+}
+
+/* 各投稿のスタイル */
+.posts_simple_view_post {
+    margin-bottom: 20px;
+}
+
+.posts_simple_view_post p {
+    margin: 5px 0;
+}
+
+.posts_simple_view_post{
+    border-top: 1px solid #ccc;
+    padding:5px;
+}
+
+/* 投稿一覧画面の投稿内のボタン 共通スタイル */
+.posts_simple_view_button{
+    padding:5px 20px;
+    margin-top: 5px;
+}
+
+/* 詳細ボタン */
+.posts_simple_view_detail_button {
+    background-color: #007bff;
+}
+
+/* 編集ボタン */
+.posts_simple_view_edit_button {
+    background-color: #ffc107;
+    color: white;
+    text-decoration: none;
+}
+
+/* 削除ボタン */
+.posts_simple_view_delete_form {
+    display: inline-block;
+}
+
+.posts_simple_view_delete_button {
+    background-color: #dc3545;
+}
+
+.posts_simple_view_disable_button{
+    background-color: rgb(184, 184, 184);
+    color: rgb(121, 121, 121);
+}
+
+/* 投稿の区切り線 */
+.posts_simple_view_separator {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}

@@ -1,5 +1,5 @@
 <header>
-    <div class="container header_container">
+    <div class="common_container header_container">
         <div class="heder_left_element">
             <p>投稿サンプル</p>
         </div>
@@ -14,3 +14,5 @@
         </div>
     </div>
 </header>
+
+<p class="header_dummy_for_space"></p>

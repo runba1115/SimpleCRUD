@@ -1,0 +1,60 @@
+html,
+body {
+    /* 不要な余白ができないようにするための指定 */
+    width: 100%;
+    min-height: 100%;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+
+    /* スマホ、PCともに16pxが推奨されている。全体にこれを適用する。 */
+    /* https://tane-be.co.jp/knowledge/web-design/2601/ */
+    font-size: 16px;
+}
+
+/* 全体に適用しても、少なくともボタンコントロールはフォントサイズが変更されないことがわかっている。 */
+/* そのため別途変更する。 */
+/* ※ほかにも同様のコントロールがある場合、「,」で区切って追加することで対象を追加すること。 */
+button{
+    font-size: 16px;
+}
+
+body {
+    background-color: rgb(245, 245, 255);
+}
+
+.common_container {
+    width: 60%;
+    padding: 0px;
+    margin: 0px auto;
+}
+
+.common_button {
+    display: inline-block;
+    background-color: rgb(156, 0, 0);
+    color: white;
+    border: none;
+    padding: 5px 30px;
+    cursor: pointer;
+    border-radius: 10px;
+    text-decoration: none;
+    border:none;
+}
+
+.common_disable_button{
+    pointer-events: none;
+    background-color: grey;
+    color: #ccc; /* ボタンを無効にしたときの文字色 */
+}
+
+.common_input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.common_shadow{
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}

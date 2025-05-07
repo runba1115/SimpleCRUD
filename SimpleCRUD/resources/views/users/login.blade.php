@@ -5,49 +5,51 @@
 
 <!-- 下記にcssについての内容を記載する -->
 @section('stylesheets')
-
+    <link rel="stylesheet" href="{{ asset('css/users/user_auth.css') }}">
 @endsection
 
 <!-- 本文部分 -->
 @section('content')
-<h1>ログイン</h1>
+    <div class="user_auth_container">
+        <h1 class="user_auth_title">ログイン</h1>
 
-<!-- エラーメッセージ表示 -->
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('users.login.attempt') }}" class="user_auth_form">
+            @csrf
+
+            <div class="user_auth_form_group">
+                <label for="email" class="user_auth_label">メールアドレス</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                    class="user_auth_input">
+            </div>
+
+            <div class="user_auth_form_group">
+                <label for="password" class="user_auth_label">パスワード</label>
+                <input id="password" type="password" name="password" required class="user_auth_input">
+            </div>
+
+            <div class="user_auth_checkbox">
+                <label>
+                    <input type="checkbox" name="remember"> ログイン状態を保持する
+                </label>
+            </div>
+
+            <div class="user_auth_button_group">
+                <button type="submit" class="common_button user_auth_login_button">ログイン</button>
+            </div>
+
+            <div class="user_auth_link">
+                <a href="#">パスワードをお忘れですか？</a>
+            </div>
+        </form>
     </div>
-@endif
-
-<form method="POST" action="{{ route('users.login.attempt') }}">
-    @csrf
-
-    <div>
-        <label for="email">メールアドレス</label>
-        <input id="email" type="email" name="email" value="{{ old('email') }}" required>
-    </div>
-
-    <div>
-        <label for="password">パスワード</label>
-        <input id="password" type="password" name="password" required>
-    </div>
-
-    <div>
-        <label>
-            <input type="checkbox" name="remember"> ログイン状態を保持する
-        </label>
-    </div>
-
-    <div>
-        <button type="submit">ログイン</button>
-    </div>
-
-    <div>
-        <a href="#">パスワードをお忘れですか？</a>
-    </div>
-</form>
 @endsection

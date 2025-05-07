@@ -1,0 +1,49 @@
+header {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    background-color: white;
+    
+    /* ヘッダーの位置を左上に固定し、ほかの要素と被ったときヘッダーが手前に表示されるようにする */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header_container {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
+header>div>div {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+header>div>div>p {
+    margin: 0;
+}
+
+/* 下記のp要素はログイン中の場合に表示されるものである。未ログインの場合のcssを使いまわせるよう、p要素のスタイルを個別で設定するようにはしていない。 */
+.header_right_element>a,
+.header_right_element>p {
+    display: inline-block;
+    width: 100px;
+    /* padding:5px 0px; */
+    font-size: 16px;
+    text-decoration: none;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    text-align: center;
+}
+
+.header_right_element>a:first-of-type,
+.header_right_element>p:first-of-type {
+    border-right: none;
+}
+
+.header_dummy_for_space{
+    height: 60px;
+    margin:0px;
+}
