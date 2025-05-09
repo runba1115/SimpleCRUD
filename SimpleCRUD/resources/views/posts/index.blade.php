@@ -45,7 +45,7 @@
                 </a>
 
                 <!-- 削除ボタン -->
-                <form action="{{ route('posts.delete', $post->id) }}" method="POST" class="posts_simple_view_delete_form" >
+                <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="posts_simple_view_delete_form" >
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="common_button posts_simple_view_button posts_simple_view_delete_button

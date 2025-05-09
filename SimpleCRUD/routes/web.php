@@ -23,7 +23,7 @@ Route::get('posts/index', [PostsController::class, 'index'])->name('posts.index'
 Route::get('post/show/{id}', [PostsController::class, 'show'])->name('posts.show'); // 投稿詳細
 Route::get('post/edit/{id}', [PostsController::class, 'edit'])->name('posts.edit'); // 投稿編集
 Route::put('post/update/{id}', [PostsController::class, 'update'])->name('posts.update'); // 投稿更新
-Route::delete('post/delete/{id}', [PostsController::class, 'delete'])->name('posts.delete'); // 投稿削除
+Route::delete('post/destroy/{id}', [PostsController::class, 'destroy'])->name('posts.destroy'); // 投稿削除
 
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PostsController extends Controller
 {
@@ -43,12 +44,18 @@ class PostsController extends Controller
     // 投稿詳細表示
     public function show($id)
     {
-        $post = Post::find($id);
-        if (!$post) {
+        try
+        {
+            $post = Post::findOrFail($id);
+            return view('posts.show', compact('post'));
+        } 
+        catch (ModelNotFoundException $e) 
+        {
+            // URLのidのPostが見つからなかったらこの処理が行われる
+            // 一覧画面にリダイレクトする
+            // ※想定通りのためエラーメッセージは表示しない
             return redirect()->route('posts.index');
         }
-    
-        return view('posts.show', compact('post'));
     }
 
     // 投稿の作者とログイン中のユーザーが違ったらリダイレクト先（投稿一覧ページ）を返す
@@ -63,56 +70,77 @@ class PostsController extends Controller
     // 投稿編集ページ表示
     public function edit($id)
     {
-        $post = Post::find($id);
-        if (!$post) {
+        try
+        {
+            $post = Post::findOrFail($id);
+        
+            if ($redirect = $this->ensureAuthor($post)) {
+                return $redirect;
+            }
+        
+            return view('posts.edit', compact('post'));
+        } 
+        catch (ModelNotFoundException $e) 
+        {
+            // URLのidのPostが見つからなかったらこの処理が行われる
+            // 一覧画面にリダイレクトする
+            // ※想定通りのためエラーメッセージは表示しない
             return redirect()->route('posts.index');
         }
-    
-        if ($redirect = $this->ensureAuthor($post)) {
-            return $redirect;
-        }
-    
-        return view('posts.edit', compact('post'));
     }
 
     // 更新
     public function update(Request $request, $id)
     {
-        $post = Post::find($id);
-        if (!$post) {
+        try
+        {
+            $post = Post::findOrFail($id);
+        
+            if ($redirect = $this->ensureAuthor($post)) {
+                return $redirect;
+            }
+        
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'detail' => 'required|string',
+            ]);
+        
+            $post->update([
+                'title' => $request->input('title'),
+                'detail' => $request->input('detail'),
+            ]);
+        
+            return redirect()->route('posts.index')->with('success', '投稿が更新されました');
+        } 
+        catch (ModelNotFoundException $e) 
+        {
+            // URLのidのPostが見つからなかったらこの処理が行われる
+            // 一覧画面にリダイレクトする
+            // ※想定通りのためエラーメッセージは表示しない
             return redirect()->route('posts.index');
         }
-    
-        if ($redirect = $this->ensureAuthor($post)) {
-            return $redirect;
-        }
-    
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'detail' => 'required|string',
-        ]);
-    
-        $post->update([
-            'title' => $request->input('title'),
-            'detail' => $request->input('detail'),
-        ]);
-    
-        return redirect()->route('posts.index')->with('success', '投稿が更新されました');
     }
 
     // 投稿削除
-    public function delete($id)
+    public function destroy($id)
     {
-        $post = Post::find($id);
-        if (!$post) {
+        try
+        {
+            $post = Post::findOrFail($id);
+        
+            if ($redirect = $this->ensureAuthor($post)) {
+                return $redirect;
+            }
+        
+            $post->delete();
+            return redirect()->route('posts.index')->with('success', '投稿が削除されました');
+        } 
+        catch (ModelNotFoundException $e) 
+        {
+            // URLのidのPostが見つからなかったらこの処理が行われる
+            // 一覧画面にリダイレクトする
+            // ※想定通りのためエラーメッセージは表示しない
             return redirect()->route('posts.index');
         }
-    
-        if ($redirect = $this->ensureAuthor($post)) {
-            return $redirect;
-        }
-    
-        $post->delete();
-        return redirect()->route('posts.index')->with('success', '投稿が削除されました');
     }
 }
