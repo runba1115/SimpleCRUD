@@ -19,6 +19,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="posts_simple_view_alert posts_simple_view_alert_error">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <a href="{{ route('posts.create') }}" class="common_button posts_simple_view_create_button">新規作成</a>
 
         @foreach ($posts as $post)

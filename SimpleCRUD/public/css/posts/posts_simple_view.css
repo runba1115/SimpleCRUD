@@ -10,6 +10,11 @@
     color: #155724;
 }
 
+.posts_simple_view_alert_error{
+    background-color: #edd4d4;
+    color: #571515;
+}
+
 /* 新規作成ボタン */
 .posts_simple_view_create_button {
     background-color: #28a745;

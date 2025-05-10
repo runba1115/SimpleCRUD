@@ -62,7 +62,7 @@ class PostsController extends Controller
     private function ensureAuthor(Post $post)
     {
         if ($post->user_id !== Auth::id()) {
-            return redirect()->route('posts.index');
+            return redirect()->route('posts.index')->with('error', '不正な操作が行われました');;
         }
         return null;
     }
