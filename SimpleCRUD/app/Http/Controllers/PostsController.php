@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PostsController extends Controller
 {
+    /**
+     * 投稿の一覧を表示する。
+     * 
+     * @return \Illuminate\View\View 投稿一覧ページのビュー
+     */
     public function index()
     {
         $posts = Post::all(); // 投稿を全件取得
@@ -16,131 +21,158 @@ class PostsController extends Controller
         return view('posts.index', compact('posts')); // 取得した投稿をビューに渡す
     }
 
-    // 投稿作成ページを表示
+    /**
+     * 投稿作成ページを表示する。
+     * 
+     * @return \Illuminate\View\View 投稿作成ページのビュー
+     */
     public function create()
     {
         return view('posts.create');
     }
 
-    // 投稿を保存
-    public function store(Request $request)
+    /**
+     * リクエストデータのバリデーションを実行する。
+     * 
+     * @param  \Illuminate\Http\Request  $request バリデーション対象のリクエスト
+     * @return array バリデーションを通過したデータ
+     */
+    private function validatePost(Request $request)
     {
-        // バリデーション
-        $request->validate([
+        return $request->validate([
             'title' => 'required|string|max:255',
             'detail' => 'required|string',
         ]);
+    }
+
+    /**
+     * 投稿を保存する。
+     * 
+     * @param  \Illuminate\Http\Request  $request フォームに入力されたデータ
+     * @return \Illuminate\Http\RedirectResponse 投稿一覧ページへのリダイレクト
+     */
+    public function store(Request $request)
+    {
+        // バリデーションを行う
+        $validated = $this->validatePost($request);
 
         // 保存処理
         Post::create([
             'user_id' => Auth::id(), // ログインユーザーID
-            'title'   => $request->input('title'),
-            'detail'  => $request->input('detail'),
+            'title'   => $validated['title'],
+            'detail'  => $validated['detail'],
         ]);
 
         return redirect()->route('posts.index')->with('success', '投稿が作成されました');
     }
 
-    // 投稿詳細表示
-    public function show($id)
+    /**
+     * 投稿をIDをもとに取得する。
+     * 
+     * @param  int  $id 投稿ID
+     * @return \App\Models\Post | \Illuminate\Http\RedirectResponse 投稿が見つかった場合は投稿、見つからなかった場合はリダイレクト
+     */
+    private function findPostById($id)
     {
-        try
+        try 
         {
-            $post = Post::findOrFail($id);
-            return view('posts.show', compact('post'));
-        } 
-        catch (ModelNotFoundException $e) 
+            return Post::findOrFail($id);
+        } catch (ModelNotFoundException $e) 
         {
-            // URLのidのPostが見つからなかったらこの処理が行われる
-            // 一覧画面にリダイレクトする
-            // ※想定通りのためエラーメッセージは表示しない
-            return redirect()->route('posts.index');
+            return redirect()->route('posts.index')->with('error', '投稿が見つかりませんでした');
         }
     }
 
-    // 投稿の作者とログイン中のユーザーが違ったらリダイレクト先（投稿一覧ページ）を返す
+    /**
+     * 投稿詳細を表示する。
+     * 
+     * @param  int  $id 投稿のID
+     * @return \Illuminate\View\View 投稿詳細ページのビュー
+     */
+    public function show($id)
+    {
+        $post = $this->findPostById($id);
+        if ($post instanceof \Illuminate\Http\RedirectResponse) {
+            return $post; // 投稿が見つからない場合はリダイレクト
+        }
+    
+        return view('posts.show', compact('post'));
+    }
+
+    /**
+     * 投稿の作者とログイン中のユーザーが違った場合にリダイレクト先を返す。
+     * 
+     * @param  \App\Models\Post  $post 投稿モデル
+     * @return \Illuminate\Http\RedirectResponse|null リダイレクトする場合はその応答
+     */
     private function ensureAuthor(Post $post)
     {
         if ($post->user_id !== Auth::id()) {
-            return redirect()->route('posts.index')->with('error', '不正な操作が行われました');;
+            return redirect()->route('posts.index')->with('error', '不正な操作が行われました');
         }
         return null;
     }
 
-    // 投稿編集ページ表示
+    /**
+     * 投稿編集ページを表示する。
+     * 
+     * @param  int  $id 編集対象の投稿ID
+     * @return \Illuminate\View\View 投稿編集ページのビュー
+     */
     public function edit($id)
     {
-        try
-        {
-            $post = Post::findOrFail($id);
-        
-            if ($redirect = $this->ensureAuthor($post)) {
-                return $redirect;
-            }
-        
-            return view('posts.edit', compact('post'));
-        } 
-        catch (ModelNotFoundException $e) 
-        {
-            // URLのidのPostが見つからなかったらこの処理が行われる
-            // 一覧画面にリダイレクトする
-            // ※想定通りのためエラーメッセージは表示しない
-            return redirect()->route('posts.index');
+        $post = $this->findPostById($id);
+        if ($post instanceof \Illuminate\Http\RedirectResponse) {
+            return $post; // 投稿が見つからない場合はリダイレクト
         }
+        
+        if ($redirect = $this->ensureAuthor($post)) {
+            return $redirect;
+        }
+    
+        return view('posts.edit', compact('post'));
     }
 
-    // 更新
+    /**
+     * 投稿を更新する。
+     * 
+     * @param  \Illuminate\Http\Request  $request フォームに入力されたデータ
+     * @param  int  $id 更新対象の投稿ID
+     * @return \Illuminate\Http\RedirectResponse 投稿一覧ページへのリダイレクト
+     */
     public function update(Request $request, $id)
     {
-        try
-        {
-            $post = Post::findOrFail($id);
-        
-            if ($redirect = $this->ensureAuthor($post)) {
-                return $redirect;
-            }
-        
-            $request->validate([
-                'title' => 'required|string|max:255',
-                'detail' => 'required|string',
-            ]);
-        
-            $post->update([
-                'title' => $request->input('title'),
-                'detail' => $request->input('detail'),
-            ]);
-        
-            return redirect()->route('posts.index')->with('success', '投稿が更新されました');
-        } 
-        catch (ModelNotFoundException $e) 
-        {
-            // URLのidのPostが見つからなかったらこの処理が行われる
-            // 一覧画面にリダイレクトする
-            // ※想定通りのためエラーメッセージは表示しない
-            return redirect()->route('posts.index');
+        $post = $this->findPostById($id);
+        if ($post instanceof \Illuminate\Http\RedirectResponse) {
+            return $post; // 投稿が見つからない場合はリダイレクト
         }
+    
+        // バリデーションを行う
+        $validated = $this->validatePost($request);
+    
+        // 投稿を更新する
+        $post->update([
+            'title' => $validated['title'],
+            'detail' => $validated['detail'],
+        ]);
+    
+        return redirect()->route('posts.index')->with('success', '投稿が更新されました');
     }
 
-    // 投稿削除
+    /**
+     * 投稿を削除する。
+     * 
+     * @param  int  $id 削除対象の投稿ID
+     * @return \Illuminate\Http\RedirectResponse 投稿一覧ページへのリダイレクト
+     */
     public function destroy($id)
     {
-        try
-        {
-            $post = Post::findOrFail($id);
-        
-            if ($redirect = $this->ensureAuthor($post)) {
-                return $redirect;
-            }
-        
-            $post->delete();
-            return redirect()->route('posts.index')->with('success', '投稿が削除されました');
-        } 
-        catch (ModelNotFoundException $e) 
-        {
-            // URLのidのPostが見つからなかったらこの処理が行われる
-            // 一覧画面にリダイレクトする
-            // ※想定通りのためエラーメッセージは表示しない
-            return redirect()->route('posts.index');
+        $post = $this->findPostById($id);
+        if ($post instanceof \Illuminate\Http\RedirectResponse) {
+            return $post; // 投稿が見つからない場合はリダイレクト
         }
+    
+        $post->delete();
+        return redirect()->route('posts.index')->with('success', '投稿が削除されました');
     }
 }
