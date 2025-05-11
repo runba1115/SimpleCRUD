@@ -43,7 +43,7 @@ header>div>div>p {
     border-right: none;
 }
 
-.header_dummy_for_space{
-    height: 60px;
-    margin:0px;
+/* 初期表示時に表示項目がヘッダーの下に隠れないよう、bodyの上部に空間を設ける */
+body{
+    padding-top: 70px;
 }

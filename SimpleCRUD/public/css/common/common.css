@@ -5,18 +5,18 @@ body {
     min-height: 100%;
     padding: 0px;
     margin: 0px;
-    box-sizing: border-box;
 
-    /* スマホ、PCともに16pxが推奨されている。全体にこれを適用する。 */
-    /* https://tane-be.co.jp/knowledge/web-design/2601/ */
     font-size: 16px;
 }
 
-/* 全体に適用しても、少なくともボタンコントロールはフォントサイズが変更されないことがわかっている。 */
-/* そのため別途変更する。 */
-/* ※ほかにも同様のコントロールがある場合、「,」で区切って追加することで対象を追加すること。 */
-button{
+/* すべてのコントロールに共通の設定を行う。 */
+*{
+    /* スマホ、PCともに16pxが推奨されている。全体にこれを適用する。 */
+    /* https://tane-be.co.jp/knowledge/web-design/2601/ */
     font-size: 16px;
+
+    /* 要素の幅や高さを設定した際に、paddingやborderもその中に含めて計算する */
+    box-sizing: border-box;
 }
 
 body {
@@ -53,6 +53,24 @@ body {
     height: 30px;
     border-radius: 5px;
     padding: 5px;
+}
+
+/* アラートのスタイル */
+.common_alert {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.common_alert_success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.common_alert_error{
+    background-color: #edd4d4;
+    color: #571515;
 }
 
 .common_shadow{

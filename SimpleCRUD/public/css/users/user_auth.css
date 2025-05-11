@@ -1,8 +1,8 @@
 .user_auth_container {
     border: 1px solid #ccc;
-    width: 70%;
     margin: 30px auto;
     padding-bottom: 20px;
+    width:100%;
 }
 
 .user_auth_title {
@@ -23,7 +23,7 @@
 .user_auth_form_group {
     display: flex;
     align-items: center;
-    width: 60%;
+    width: 90%;
     margin: 0 auto;
 }
 
