@@ -1,5 +1,11 @@
 @extends('partial/common/app')
 
+@php
+    // 定数を使用できるよう、定数の名前空間を使用する旨を記載する
+    // ※基底側のファイルに記載しても、派生側のファイルでその名前空間を使用することはできない
+    use App\Constants\Constants;
+@endphp
+
 {{-- 下記にブラウザのタブに表示するタイトルを設定する --}}
 @section('title', 'ログイン')
 
@@ -22,15 +28,15 @@
 
                 <!-- メールアドレス -->
                 <div class="user_auth_form_group">
-                    <label for="email" class="user_auth_label">メールアドレス</label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                    <label for="{{Constants::USER_COLUMN_EMAIL}}" class="user_auth_label">メールアドレス</label>
+                    <input id="{{Constants::USER_COLUMN_EMAIL}}" type="email" name="{{Constants::USER_COLUMN_EMAIL}}" value="{{ old(Constants::USER_COLUMN_EMAIL) }}" required
                         class="user_auth_input">
                 </div>
 
                 <!-- パスワード -->
                 <div class="user_auth_form_group">
-                    <label for="password" class="user_auth_label">パスワード</label>
-                    <input id="password" type="password" name="password" required class="user_auth_input">
+                    <label for="{{Constants::USER_COLUMN_PASSWORD}}" class="user_auth_label">パスワード</label>
+                    <input id="{{Constants::USER_COLUMN_PASSWORD}}" type="password" name="{{Constants::USER_COLUMN_PASSWORD}}" required class="user_auth_input">
                 </div>
 
                 <!-- ログイン状態を保持する チェックボックス -->

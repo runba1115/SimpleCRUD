@@ -9,7 +9,7 @@ class Post extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'detail'];
+    protected $fillable = [Constants::POST_COLUMN_USER_ID, Constants::POST_COLUMN_TITLE, Constants::POST_COLUMN_DETAIL];
 
     // User モデルとのリレーションを定義
     public function user()

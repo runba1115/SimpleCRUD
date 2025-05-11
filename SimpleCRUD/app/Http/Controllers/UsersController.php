@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
 use Redirect;
-
+use App\Constants\Constants;
 
 class UsersController extends Controller
 {
@@ -38,9 +38,9 @@ class UsersController extends Controller
         // ※登録可能である条件を満たしていない場合、自動的に元のページに戻る。
         // （その時、自動的に入力した値の復元、エラーメッセージの設定などが行われる。）
         $validated = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
+            Constants::USER_COLUMN_NAME => Constants::USERS_NAME_VALIDATE,
+            Constants::USER_COLUMN_EMAIL => Constants::USERS_EMAIL_VALIDATE,
+            Constants::USER_COLUMN_PASSWORD => Constants::USERS_PASSWORD_VALIDATE,
         ]);
 
         // ユーザーの作成を行う
@@ -49,19 +49,22 @@ class UsersController extends Controller
         try
         {
             $user = User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
+                Constants::USER_COLUMN_NAME => $validated[Constants::USER_COLUMN_NAME],
+                Constants::USER_COLUMN_EMAIL => $validated[Constants::USER_COLUMN_EMAIL],
+                Constants::USER_COLUMN_PASSWORD => Hash::make($validated[Constants::USER_COLUMN_PASSWORD]),
             ]);
     
             // 登録後、ログイン画面へリダイレクトする
-            return redirect()->route('users.login')->with('success', 'ユーザー登録が完了しました。ログインしてください。');
+            return redirect()->route('users.login')->with('success', Constants::USERS_REGISTER_SUCCESS);
         }
         catch(\Exception $e) 
         {
-            // エラー発生時、エラーメッセージを表示し、元のフォームに戻す
-            return back()->withErrors(['error' => 'ユーザー登録に失敗しました: ' . $e->getMessage()])
-                        ->withInput();
+            // ユーザーに、ユーザーが入力した値以外によるエラーメッセージを表示するのは望ましくない。
+            // エラーの内容をログファイルに出力する。
+            \Log::error("ユーザー登録エラー: " . $e->getMessage());
+
+            // ユーザーには一般的なエラーメッセージを表示して元のフォームに戻す
+            return back()->withErrors(['error' => Constants::USERS_REGISTER_ERROR])->withInput();
         }
     }
     
@@ -83,7 +86,7 @@ class UsersController extends Controller
     {
         // ユーザーが入力したメールアドレスとパスワードを取得する
         // ユーザーからこれら以外の値が送信された場合に不要なデータにより想定しない動作が起こるのを防ぐため
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only(Constants::USER_COLUMN_EMAIL, Constants::USER_COLUMN_PASSWORD);
 
         // 認証を行う。
         // ログイン状態を保持するよう入力されている場合、認証を行う関数の第2引数にtrueを渡し、ログイン状態を保持する
@@ -98,15 +101,13 @@ class UsersController extends Controller
 
             // ログイン成功時専用の画面は作成していない。
             // ログイン成功メッセージとともに投稿一覧画面にリダイレクトする
-            return redirect()->route('posts.index')->with('success', 'ログインに成功しました');
+            return redirect()->route('posts.index')->with('success', Constants::USERS_LOGIN_SUCCESS);
         }
 
         // 認証に失敗した（メールアドレス、パスワードがデータベースに保存されているものとあっていない）
         // ログイン画面にリダイレクトする。
         // メッセージは、認証に失敗した旨のみとする。（どちらが間違っているか表示すると悪用される可能性があるため。）
-        return back()->withErrors([
-            'email' => '認証に失敗しました。',
-        ])->withInput($request->only('email', 'remember'));
+        return back()->withErrors([Constants::USERS_LOGIN_FAILED])->withInput($request->only(Constants::USER_COLUMN_EMAIL, 'remember'));
     }
 
     /**
@@ -127,7 +128,7 @@ class UsersController extends Controller
         // CSRFトークンを再生成し、過去のトークンを無効にすることで、不正な操作を防ぐ。
         $request->session()->regenerateToken();
 
-        return redirect()->route('users.login');
+        return redirect()->route('users.login')->with('success', Constants::USERS_LOGOUT_SUCCESS);
     }
 
 }

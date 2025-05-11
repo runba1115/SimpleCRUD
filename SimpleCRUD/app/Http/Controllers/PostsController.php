@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Constants\Constants;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -40,8 +41,8 @@ class PostsController extends Controller
     private function validatePost(Request $request)
     {
         return $request->validate([
-            'title' => 'required|string|max:255',
-            'detail' => 'required|string',
+            Constants::POST_COLUMN_TITLE => Constants::POST_TITLE_VALIDATE,
+            Constants::POST_COLUMN_DETAIL => Constants::POST_DETAIL_VALIDATE,
         ]);
     }
 
@@ -58,12 +59,12 @@ class PostsController extends Controller
 
         // 保存処理
         Post::create([
-            'user_id' => Auth::id(), // ログインユーザーID
-            'title'   => $validated['title'],
-            'detail'  => $validated['detail'],
+            Constants::POST_COLUMN_USER_ID => Auth::id(), // ログインユーザーID
+            Constants::POST_COLUMN_TITLE   => $validated[Constants::POST_COLUMN_TITLE],
+            Constants::POST_COLUMN_DETAIL  => $validated[Constants::POST_COLUMN_DETAIL],
         ]);
 
-        return redirect()->route('posts.index')->with('success', '投稿が作成されました');
+        return redirect()->route('posts.index')->with('success', Constants::POST_CREATED_SUCCESS);
     }
 
     /**
@@ -79,7 +80,7 @@ class PostsController extends Controller
             return Post::findOrFail($id);
         } catch (ModelNotFoundException $e) 
         {
-            return redirect()->route('posts.index')->with('error', '投稿が見つかりませんでした');
+            return redirect()->route('posts.index')->with('error', Constants::POST_NOT_FOUND_ERROR);
         }
     }
 
@@ -108,7 +109,7 @@ class PostsController extends Controller
     private function ensureAuthor(Post $post)
     {
         if ($post->user_id !== Auth::id()) {
-            return redirect()->route('posts.index')->with('error', '不正な操作が行われました');
+            return redirect()->route('posts.index')->with('error', Constants::INVALID_OPERATION_ERROR);
         }
         return null;
     }
@@ -152,11 +153,11 @@ class PostsController extends Controller
     
         // 投稿を更新する
         $post->update([
-            'title' => $validated['title'],
-            'detail' => $validated['detail'],
+            Constants::POST_COLUMN_TITLE => $validated[Constants::POST_COLUMN_TITLE],
+            Constants::POST_COLUMN_DETAIL => $validated[Constants::POST_COLUMN_DETAIL],
         ]);
     
-        return redirect()->route('posts.index')->with('success', '投稿が更新されました');
+        return redirect()->route('posts.index')->with('success', Constants::POST_UPDATED_SUCCESS);
     }
 
     /**
@@ -173,6 +174,6 @@ class PostsController extends Controller
         }
     
         $post->delete();
-        return redirect()->route('posts.index')->with('success', '投稿が削除されました');
+        return redirect()->route('posts.index')->with('success', Constants::POST_DELETED_SUCCESS);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Constants\Constants;
 
 class User extends Authenticatable
 {
@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        Constants::USER_COLUMN_NAME,
+        Constants::USER_COLUMN_EMAIL,
+        Constants::USER_COLUMN_PASSWORD,
     ];
 
     /**
@@ -29,7 +29,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        Constants::USER_COLUMN_PASSWORD,
         'remember_token',
     ];
 
@@ -42,7 +42,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            Constants::USER_COLUMN_PASSWORD => 'hashed',
         ];
     }
 }

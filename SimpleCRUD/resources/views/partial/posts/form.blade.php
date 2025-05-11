@@ -1,3 +1,9 @@
+@php
+    // 定数を使用できるよう、定数の名前空間を使用する旨を記載する
+    // ※基底側のファイルに記載しても、派生側のファイルでその名前空間を使用することはできない
+    use App\Constants\Constants;
+@endphp
+
 <div class="common_container">
     @include("partial/common/message")
 </div>
@@ -10,11 +16,11 @@
         @method('PUT')
     @endif
 
-    <label for="title" class="post_form_label">タイトル</label>
-    <input type="text" name="title" id="title" class="post_form_input" required value="{{ old('title', $post->title ?? '') }}">
+    <label for="{{Constants::POST_COLUMN_TITLE}}" class="post_form_label">タイトル</label>
+    <input type="text" name="{{Constants::POST_COLUMN_TITLE}}" id="{{Constants::POST_COLUMN_TITLE}}" class="post_form_input" required value="{{ old(Constants::POST_COLUMN_TITLE, $post->title ?? '') }}">
 
-    <label for="detail" class="post_form_label">詳細</label>
-    <textarea name="detail" id="detail" rows="5" class="post_form_textarea" required>{{ old('detail', $post->detail ?? '') }}</textarea>
+    <label for="{{Constants::POST_COLUMN_DETAIL}}" class="post_form_label">詳細</label>
+    <textarea name="{{Constants::POST_COLUMN_DETAIL}}" id="{{Constants::POST_COLUMN_DETAIL}}" rows="5" class="post_form_textarea" required>{{ old(Constants::POST_COLUMN_DETAIL, $post->detail ?? '') }}</textarea>
 
     <input type="submit" class="common_button post_form_submit_button" value="{{ $buttonText }}">
 

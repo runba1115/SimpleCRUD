@@ -1,5 +1,11 @@
 @extends('partial/common/app')
 
+@php
+    // 定数を使用できるよう、定数の名前空間を使用する旨を記載する
+    // ※基底側のファイルに記載しても、派生側のファイルでその名前空間を使用することはできない
+    use App\Constants\Constants;
+@endphp
+
 {{-- 下記にブラウザのタブに表示するタイトルを設定する --}}
 @section('title', 'ユーザー登録')
 
@@ -22,20 +28,20 @@
         
                 <!-- ユーザー名 -->
                 <div class="user_auth_form_group">
-                    <label for="name" class="user_auth_label">ユーザー名</label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" required class="common_input">
+                    <label for="{{Constants::USER_COLUMN_NAME}}" class="user_auth_label">ユーザー名</label>
+                    <input type="text" name="{{Constants::USER_COLUMN_NAME}}" id="{{Constants::USER_COLUMN_NAME}}" value="{{ old(Constants::USER_COLUMN_NAME) }}" required class="common_input">
                 </div>
         
                 <!-- メールアドレス -->
                 <div class="user_auth_form_group">
-                    <label for="email" class="user_auth_label">メールアドレス</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" required class="common_input">
+                    <label for="{{Constants::USER_COLUMN_EMAIL}}" class="user_auth_label">メールアドレス</label>
+                    <input type="email" name="{{Constants::USER_COLUMN_EMAIL}}" id="{{Constants::USER_COLUMN_EMAIL}}" value="{{ old(Constants::USER_COLUMN_EMAIL) }}" required class="common_input">
                 </div>
         
                 <!-- パスワード -->
                 <div class="user_auth_form_group">
-                    <label for="password" class="user_auth_label">パスワード</label>
-                    <input type="password" name="password" id="password" required class="common_input">
+                    <label for="{{Constants::USER_COLUMN_PASSWORD}}" class="user_auth_label">パスワード</label>
+                    <input type="{{Constants::USER_COLUMN_PASSWORD}}" name="password" id="{{Constants::USER_COLUMN_PASSWORD}}" required class="common_input">
                 </div>
         
                 <!-- パスワード確認（同じパスワードを再度入力させる） -->
