@@ -1,26 +1,40 @@
+/* 色の変数設定 */
+:root {
+    --body_background_color:rgb(245, 245, 255); /* body(画面全体）の背景色 */
+    --button_background_color: rgb(156, 0, 0); /* メインボタンの背景色 */
+    --button_text_color: white; /* ボタンの文字色 */
+    --success_background_color: #d4edda; /* 成功メッセージの背景色 */
+    --success_text_color: #155724; /* 成功メッセージの文字色 */
+    --error_background_color: #edd4d4; /* エラーメッセージの背景色 */
+    --error_text_color: #571515; /* エラーメッセージの文字色 */
+    --disabled_button_background: grey; /* 無効ボタンの背景色 */
+    --disabled_button_text_color: #ccc; /* 無効ボタンの文字色 */
+    --box_shadow_color: rgba(0, 0, 0, 0.1); /* 影を設定するときの色 */
+    --base-font-size: 16px; /* 基本となるフォントサイズ（スマホ、PCともに16pxが推奨されている。 https://tane-be.co.jp/knowledge/web-design/2601/） */
+
+    --common_border_color: #ccc; /* 境界線の色（ほかのcssファイルからも使用する） */
+}
+
+/* 不要な余白ができないようにするための指定 */
 html,
 body {
-    /* 不要な余白ができないようにするための指定 */
     width: 100%;
     min-height: 100%;
     padding: 0px;
     margin: 0px;
-
-    font-size: 16px;
 }
 
-/* すべてのコントロールに共通の設定を行う。 */
+/* すべてのコントロールに共通の設定を行う */
 *{
-    /* スマホ、PCともに16pxが推奨されている。全体にこれを適用する。 */
-    /* https://tane-be.co.jp/knowledge/web-design/2601/ */
-    font-size: 16px;
+    /* 基本となるフォントサイズを設定する */
+    font-size: var(--base-font-size);
 
     /* 要素の幅や高さを設定した際に、paddingやborderもその中に含めて計算する */
     box-sizing: border-box;
 }
 
 body {
-    background-color: rgb(245, 245, 255);
+    background-color: var(--body_background_color)
 }
 
 .common_container {
@@ -31,8 +45,8 @@ body {
 
 .common_button {
     display: inline-block;
-    background-color: rgb(156, 0, 0);
-    color: white;
+    background-color: var(--button_background_color);
+    color: var(--button_text_color);
     border: none;
     padding: 5px 30px;
     cursor: pointer;
@@ -43,8 +57,9 @@ body {
 
 .common_disable_button{
     pointer-events: none;
-    background-color: grey;
-    color: #ccc; /* ボタンを無効にしたときの文字色 */
+    background-color: var(--disabled_button_background);
+    color: var(--disabled_button_text_color);
+    cursor: not-allowed;
 }
 
 .common_input {
@@ -64,15 +79,15 @@ body {
 }
 
 .common_alert_success {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: var(--success_background_color);
+    color: var(--success_text_color);
 }
 
 .common_alert_error{
-    background-color: #edd4d4;
-    color: #571515;
+    background-color: var(--error_background_color);
+    color: var(--error_text_color);
 }
 
 .common_shadow{
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--box_shadow_color);
 }

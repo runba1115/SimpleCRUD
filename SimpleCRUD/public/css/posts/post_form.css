@@ -1,3 +1,14 @@
+/* 色の変数設定 */
+:root {
+    --button_background_color: #007bff; /* 送信ボタンの背景色 */
+    --button_disabled_background: rgb(184, 184, 184); /* 無効ボタンの背景色 */
+    --button_text_color: white; /* ボタンの文字色 */
+    --link_color: #007bff; /* リンクの色 */
+    --link_hover_color: #0056b3; /* リンクのホバー時の色 */
+    --border_color: var(--common_border_color); /* ボーダーの色 */
+    --error_color: red; /* エラーメッセージの色 */
+}
+
 /* フォーム全体のスタイル */
 .post_form_container {
     padding: 20px;
@@ -7,7 +18,7 @@
 
 /* エラーメッセージ */
 .post_form_error {
-    color: red;
+    color: var(--error_color);
     margin-bottom: 20px;
 }
 
@@ -23,7 +34,7 @@
     width: 100%;
     margin-bottom: 15px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--common_border_color);
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
@@ -34,7 +45,7 @@
     width: 100%;
     margin-bottom: 15px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--common_border_color);
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
@@ -43,27 +54,31 @@
 
 /* 送信ボタン */
 .post_form_submit_button {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--button_background_color);
+    color: var(--button_text_color);
     padding: 10px 30px;
     display: block;
     margin :0 auto;
 }
 
 /* ボタンの無効化 */
+/* ※commonの中に似た者があるが、それを適用しても送信ボタン用のものが優先され、上書きされてしまう。
+ここで同様の設定を行う。 */
 .post_form_disable_button {
-    background-color: rgb(184, 184, 184);
-    color: rgb(121, 121, 121);
+    pointer-events: none;
+    background-color: var(--disabled_button_background);
+    color: var(--disabled_button_text_color);
     cursor: not-allowed;
 }
 
 /* リンク */
 .post_form_back_link {
-    color: #007bff;
+    color: var(--link_color);
     text-decoration: none;
     font-size: 16px;
 }
 
 .post_form_back_link:hover {
+    color: var(--link_hover_color);
     text-decoration: underline;
 }

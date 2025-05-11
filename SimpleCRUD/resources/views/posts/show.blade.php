@@ -47,9 +47,11 @@
             </form>
 
             <!-- 一覧に戻るボタン -->
-            <a href="{{ route('posts.index') }}" class="common_button posts_detail_view_detail_button">
-                一覧に戻る
-            </a>
+            <p>
+                <a href="{{ route('posts.index') }}" class="common_button posts_detail_view_detail_button">
+                    一覧に戻る
+                </a>
+            </p>
         </div>
     </div>
 @endsection

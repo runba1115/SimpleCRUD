@@ -9,8 +9,13 @@
         @continue
     @endif
 
+    {{-- メッセージが文字列(一つしか存在しない)の場合でも配列として扱えるようにする --}}
+    @php
+        $messages = (array) session($messageType); // sessionが配列でない場合、強制的に配列に変換
+    @endphp
+
     {{-- 各メッセージをループ処理 --}}
-    @foreach (session($messageType) as $message)
+    @foreach ($messages as $message)
         <div class="common_alert 
             {{-- メッセージの種類に応じて異なるスタイルを適用する（成功：緑色 エラー：赤） --}}
             @if ($messageType == 'success') common_alert_success 
@@ -22,7 +27,7 @@
     @endforeach
 @endforeach
 
-{{-- success と error のメッセージを順番に処理する --}}
+{{-- すべてのエラーメッセージを表示する --}}
 @foreach ($errors->all() as $error)
     <div class="common_alert common_alert_error">
         {{-- メッセージを表示する--}}
